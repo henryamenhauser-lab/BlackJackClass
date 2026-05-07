@@ -43,6 +43,8 @@ public class Main {
         dealer.printHand();
         System.out.println("Total: " + dealer.getTotal());
 
+
+
     }
 
     public void printDeck() {
