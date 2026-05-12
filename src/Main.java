@@ -12,6 +12,14 @@ public class Main {
     public Main() {
         Scanner input = new Scanner(System.in);
 
+        System.out.println("How Many Players? (1-4)");
+        int numPlayers = input.nextInt();
+        input.nextLine();
+
+        if (numPlayers > 4) numPlayers =4;
+        if (numPlayers < 1) numPlayers =1;
+
+
         deck = new Card[52];
 
         for (int i =0; i<deck.length; i++) {
@@ -29,60 +37,76 @@ public class Main {
         shuffle();
         deckPosition = 0;
 
-        Player player = new Player();
+        Player[] players = new Player[numPlayers];
+
+        for (int i = 0; i < numPlayers; i++) {
+            players[i] = new Player();
+        }
+
         Player dealer = new Player();
 
-        Card playerCard1 = dealCard();
-        playerCard1.isUp = true;
+        for (int i = 0; i < numPlayers; i++) {
 
-        Card playerCard2 = dealCard();
-        playerCard2.isUp = true;
+            Card c1 = dealCard();
+            c1.isUp = true;
 
-        player.addCard(playerCard1);
-        player.addCard(playerCard2);
+            Card c2 = dealCard();
+            c2.isUp = true;
 
-        Card dealerCard1 = dealCard();
-        dealerCard1.isUp = true;
+            players[i].addCard(c1);
+            players[i].addCard(c2);
+        }
 
-        Card dealerCard2 = dealCard();
-        dealerCard2.isUp = false;
+        for (int i = 0; i < numPlayers; i++) {
+            System.out.println("Player " + (i + 1) + " Hand:");
+            players[i].printHand();
+            System.out.println("Total: " + players[i].getTotal());
+            System.out.println();
+        }
 
-        dealer.addCard(dealerCard1);
-        dealer.addCard(dealerCard2);
+        Card dealerC1 = dealCard();
+        dealerC1.isUp = true;
 
-        System.out.println("Player Hand:");
-        player.printHand();
-        System.out.println("Total: " + player.getTotal());
+        Card dealerC2 = dealCard();
+        dealerC2.isUp = false;
 
-        System.out.println();
+        dealer.addCard(dealerC1);
+        dealer.addCard(dealerC2);
 
         System.out.println("Dealer Hand:");
         dealer.printHand();
+        System.out.println();
 
-        boolean playing = true;
 
-        while (playing) {
-            System.out.println();
-            System.out.println("Type Hit or Stay");
-            String choice = input.nextLine();
+        for (int i = 0; i < numPlayers; i++) {
 
-            if (choice.equalsIgnoreCase("hit")) {
+            boolean turn = true;
 
-                Card newCard = dealCard();
-                newCard.isUp = true;
+            while (turn) {
 
-                player.addCard(newCard);
+                System.out.println("Player " + (i + 1) + ": Hit or Stay?");
 
-                System.out.println("Player Hand:");
-                player.printHand();
-                System.out.println("Total: " + player.getTotal());
 
-                if (player.getTotal() > 21) {
-                    System.out.println("Bust! Dealer wins.");
-                    return;
+                String choice = input.nextLine();
+
+                if (choice.equalsIgnoreCase("hit")) {
+
+                    Card newCard = dealCard();
+                    newCard.isUp = true;
+                    players[i].addCard(newCard);
+
+                    System.out.println();
+                    players[i].printHand();
+                    System.out.println("Total: " + players[i].getTotal());
+
+                    if (players[i].getTotal() > 21) {
+                        System.out.println("Bust!");
+                        turn = false;
+                    }
+
+                } else if (choice.equalsIgnoreCase("stay")) {
+                    turn = false;
                 }
-            } else if (choice.equalsIgnoreCase("stay")) {
-                playing = false;
             }
         }
 
@@ -90,6 +114,7 @@ public class Main {
 
         System.out.println();
         System.out.println("Dealer reveals:");
+        System.out.println();
         dealer.printHand();
         System.out.println("Total: " + dealer.getTotal());
 
@@ -97,7 +122,7 @@ public class Main {
             Card newCard = dealCard();
             newCard.isUp = true;
             dealer.addCard(newCard);
-
+            System.out.println();
             System.out.println("Dealer hits:");
             dealer.printHand();
             System.out.println("Total: " + dealer.getTotal());
@@ -108,22 +133,21 @@ public class Main {
             return;
         }
 
-        if (player.getTotal() > dealer.getTotal()) {
-            System.out.println("Player Wins!");
-        } else if (dealer.getTotal() > player.getTotal()) {
-            System.out.println("Dealer wins");
-        } else {
-            System.out.println("Push");
+        System.out.println();
+        System.out.println("Results:");
+        System.out.println("Dealer: " + dealer.getTotal());
+
+        for (int i = 0; i < numPlayers; i++) {
+
+            int pTotal = players[i].getTotal();
+            int dTotal = dealer.getTotal();
+
+            System.out.println("Player " + (i + 1) + ": " + pTotal);
+
+            if (pTotal > dTotal && pTotal <= 21) System.out.println("Player Wins!");
+            if (dTotal > pTotal && dTotal <= 21) System.out.println("Dealer Wins!");
+            if (pTotal == dTotal) System.out.println("Push!");
         }
-
-
-
-
-
-
-
-
-
     }
 
     public void printDeck() {
