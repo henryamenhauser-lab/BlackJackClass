@@ -12,6 +12,12 @@ public class Card {
     }
 
     public void printCard() {
+
+        if (!isUp) {
+            System.out.println("Card Face Down");
+            return;
+        }
+
         if (value == 0) {
             System.out.println("Ace of " + suit);
         } else if (value == 10) {
@@ -34,9 +40,4 @@ public class Card {
             return value +1;
         }
     }
-
-
-
-
-
 }
