@@ -70,7 +70,9 @@ public class Main {
         dealer.addCard(dealerC1);
         dealer.addCard(dealerC2);
 
-        showHand("Dealer", dealer);
+        System.out.println("Dealer Hand:");
+        dealer.printHand();
+        System.out.println();
 
 
         for (int i = 0; i < numPlayers; i++) {
@@ -114,18 +116,17 @@ public class Main {
             newCard.isUp = true;
             dealer.addCard(newCard);
             System.out.println();
-            System.out.println("Dealer hits:");
             showHand("Dealer Hits", dealer);
         }
 
         if (dealer.getTotal() > 21) {
-            System.out.println("Dealer Busts. Player Wins!");
             return;
         }
 
         System.out.println();
         System.out.println("Results:");
         System.out.println("Dealer: " + dealer.getTotal());
+        System.out.println();
 
         for (int i = 0; i < numPlayers; i++) {
 
@@ -143,6 +144,7 @@ public class Main {
             } else {
                 System.out.println("Push!");
             }
+            System.out.println();
         }
     }
 
