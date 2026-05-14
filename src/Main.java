@@ -58,10 +58,7 @@ public class Main {
         }
 
         for (int i = 0; i < numPlayers; i++) {
-            System.out.println("Player " + (i + 1) + " Hand:");
-            players[i].printHand();
-            System.out.println("Total: " + players[i].getTotal());
-            System.out.println();
+            showHand("Player " + (i + 1), players[i]);
         }
 
         Card dealerC1 = dealCard();
@@ -73,9 +70,7 @@ public class Main {
         dealer.addCard(dealerC1);
         dealer.addCard(dealerC2);
 
-        System.out.println("Dealer Hand:");
-        dealer.printHand();
-        System.out.println();
+        showHand("Dealer", dealer);
 
 
         for (int i = 0; i < numPlayers; i++) {
@@ -96,8 +91,7 @@ public class Main {
                     players[i].addCard(newCard);
 
                     System.out.println();
-                    players[i].printHand();
-                    System.out.println("Total: " + players[i].getTotal());
+                    showHand("Player " + (i + 1), players[i]);
 
                     if (players[i].getTotal() > 21) {
                         System.out.println("Bust!");
@@ -113,10 +107,7 @@ public class Main {
         dealer.hand[1].isUp = true;
 
         System.out.println();
-        System.out.println("Dealer reveals:");
-        System.out.println();
-        dealer.printHand();
-        System.out.println("Total: " + dealer.getTotal());
+        showHand("Dealer Reveals", dealer);
 
         while (dealer.getTotal() < 17) {
             Card newCard = dealCard();
@@ -124,8 +115,7 @@ public class Main {
             dealer.addCard(newCard);
             System.out.println();
             System.out.println("Dealer hits:");
-            dealer.printHand();
-            System.out.println("Total: " + dealer.getTotal());
+            showHand("Dealer Hits", dealer);
         }
 
         if (dealer.getTotal() > 21) {
@@ -144,9 +134,15 @@ public class Main {
 
             System.out.println("Player " + (i + 1) + ": " + pTotal);
 
-            if (pTotal > dTotal && pTotal <= 21) System.out.println("Player Wins!");
-            if (dTotal > pTotal && dTotal <= 21) System.out.println("Dealer Wins!");
-            if (pTotal == dTotal) System.out.println("Push!");
+            if (pTotal > 21) {
+                System.out.println("Bust!");
+            } else if (pTotal > dTotal || dTotal > 21) {
+                System.out.println("Player Wins!");
+            } else if (dTotal > pTotal) {
+                System.out.println("Dealer Wins!");
+            } else {
+                System.out.println("Push!");
+            }
         }
     }
 
@@ -170,6 +166,14 @@ public class Main {
         Card nextCard = deck[deckPosition];
         deckPosition++;
         return nextCard;
+    }
+
+    public void showHand(String name, Player p) {
+
+        System.out.println(name + " Hand:");
+        p.printHand();
+        System.out.println("Total: " + p.getTotal());
+        System.out.println();
     }
 
 }
